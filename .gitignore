@@ -1,0 +1,6 @@
+# Visual Studio files
+.vs
+test_dll_for_py/x64
+
+#build dir
+x64/
