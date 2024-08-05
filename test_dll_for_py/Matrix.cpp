@@ -2,6 +2,7 @@
 
 #include "Matrix.h"
 
+
 namespace
 {
 
@@ -15,6 +16,12 @@ void sPrint( const std::vector<T> v )
 
 }
 
+Matrix::Matrix( const Matrix& other )
+    : values_( other.values_ )
+    , dimensions_( other.dimensions_ )
+{
+}
+
 Matrix::Matrix( int n, va_list* argptr )
 {
     while ( n-- )
@@ -24,6 +31,16 @@ Matrix::Matrix( int n, va_list* argptr )
     }
 
     va_end( *argptr );
+}
+
+void Matrix::setDimensions( const std::vector<int>& dimensions )
+{
+    dimensions_ = dimensions;
+}
+
+const std::vector<int>& Matrix::getDimensions() const
+{
+    return dimensions_;
 }
 
 int Matrix::fill( int n, va_list* argptr )
@@ -59,6 +76,9 @@ int Matrix::size()
 
 void Matrix::debugCall()
 {
+    //sPrint( dimensions_ );
+    //sPrint( values_ );
+
     auto getCounter = [this]( int i )
     {
         int counter = 1;
@@ -138,4 +158,22 @@ void Matrix::debugCall()
     std::cout << "\n";
 
     return;
+}
+
+void Matrix::sort()
+{
+    std::sort( values_.begin(), values_.end() );
+}
+
+void Matrix::operator+=( const Matrix& otherMatrix )
+{
+    if ( dimensions_ != otherMatrix.dimensions_ )
+    {
+        throw std::runtime_error( "different dimensions" );
+    }
+
+    for ( size_t i = 0; i < values_.size(); ++i )
+    {
+        values_[i] += otherMatrix.values_[i];
+    }
 }

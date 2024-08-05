@@ -10,24 +10,51 @@ Matrix* new_matrix( int n, ... )
     return new Matrix( n, &args );
 }
 
-void del_matrix( Matrix* Matrix )
+EXPORTS_API Matrix* copy_matrix( const Matrix* other )
 {
-    delete Matrix;
+    return new Matrix( *other );
 }
 
-int fill_matrix( Matrix* Matrix, int n, ... )
+void del_matrix( Matrix* matrix )
 {
-    va_list args;
-    va_start( args, n );
-    return Matrix->fill( n, &args );
-}
-
-void call_matrix( Matrix* Matrix )
-{
-    if ( !Matrix )
+    if ( !matrix )
     {
         return;
     }
 
-    Matrix->debugCall();
+    delete matrix;
+}
+
+int fill_matrix( Matrix* matrix, int n, ... )
+{
+    if ( !matrix )
+    {
+        return static_cast<int>( Error::InvalidArguments );
+    }
+
+    va_list args;
+    va_start( args, n );
+    return matrix->fill( n, &args );
+}
+
+void call_matrix( Matrix* matrix )
+{
+    if ( !matrix )
+    {
+        return;
+    }
+
+    matrix->debugCall();
+}
+
+void sort_matrix( Matrix* matrix )
+{
+    matrix->sort();
+}
+
+int sum_matrix( Matrix* variable, const Matrix* fixed )
+{
+    *variable += *fixed;
+
+    return 1;
 }
