@@ -1,17 +1,10 @@
 #include "pch.h"
 
-#include "Matrix.h"
+#include "c_wrappers_for_py.h"
 
-
-void CheckMatrix()
+void checking()
 {
-    //auto node = Node( 2, 3, 4 );
-    //node.setValue( 1, 1, 1, 7. );
-    //node.setValue( 1, 5. );
 
-    auto node = Node( 2, 2, 2 );
-    node.fill( 1, 2, 3, 4, 5, 6, 7, 8 );
-    node.call();
 }
 
 bool DllMain( HMODULE hModule,
@@ -23,7 +16,7 @@ bool DllMain( HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
         //std::cout << "DllMain attach\n";
-        CheckMatrix();
+        //checking();
         break;
     case DLL_PROCESS_DETACH:
         //std::cout << "DllMain detach\n";
