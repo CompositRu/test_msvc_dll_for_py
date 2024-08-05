@@ -26,11 +26,11 @@ Matrix::Matrix( int n, va_list* argptr )
     va_end( *argptr );
 }
 
-void Matrix::fill( int n, va_list* argptr )
+int Matrix::fill( int n, va_list* argptr )
 {
     if ( n != size() )
     {
-        return;
+        return static_cast<int>( Error::InvalidArguments );
     }
 
     while ( n-- )
@@ -40,6 +40,7 @@ void Matrix::fill( int n, va_list* argptr )
     }
 
     va_end( *argptr );
+    return static_cast<int>( Error::Success );
 }
 
 int Matrix::size()

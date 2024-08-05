@@ -10,7 +10,7 @@ extern "C" {
 
 EXPORTS_API Matrix* new_matrix( int n, ... );
 EXPORTS_API void del_matrix( Matrix* Matrix );
-EXPORTS_API void fill_matrix( Matrix* Matrix, int n, ... );
+EXPORTS_API int fill_matrix( Matrix* Matrix, int n, ... );
 EXPORTS_API void call_matrix( Matrix* Matrix );
 
 #ifdef __cplusplus

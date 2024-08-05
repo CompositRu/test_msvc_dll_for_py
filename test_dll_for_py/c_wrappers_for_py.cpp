@@ -15,11 +15,11 @@ void del_matrix( Matrix* Matrix )
     delete Matrix;
 }
 
-void fill_matrix( Matrix* Matrix, int n, ... )
+int fill_matrix( Matrix* Matrix, int n, ... )
 {
     va_list args;
     va_start( args, n );
-    Matrix->fill( n, &args );
+    return Matrix->fill( n, &args );
 }
 
 void call_matrix( Matrix* Matrix )
