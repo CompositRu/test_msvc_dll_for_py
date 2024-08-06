@@ -47,36 +47,36 @@ class Matrix:
     def __init__(self, dimensionsOrOtherObj):
         if isinstance(dimensionsOrOtherObj, list):
             dimensions = dimensionsOrOtherObj
-            self.matrix_obj = call_variadic_func( lib.new_matrix, dimensions, ct.c_void_p )
+            self.matrix_obj = call_variadic_func( lib.new_matrix_int, dimensions, ct.c_void_p )
         else:
             matrix_obj = dimensionsOrOtherObj
             self.matrix_obj = matrix_obj
 
     def __del__(self):
-        call_matrix_variadic_func( self.matrix_obj, lib.del_matrix )
+        call_matrix_variadic_func( self.matrix_obj, lib.del_matrix_int )
 
     def fill(self, values = []):
-        error = call_matrix_variadic_func( self.matrix_obj, lib.fill_matrix, values )
+        error = call_matrix_variadic_func( self.matrix_obj, lib.fill_matrix_int, values )
         if error != Error.success.value:
             raise Exception( error_description[Error(error)])
 
     def print(self):
-        call_matrix_variadic_func( self.matrix_obj, lib.call_matrix )
+        call_matrix_variadic_func( self.matrix_obj, lib.print_matrix_int )
 
     def operation(self, func, other):
-        lib.copy_matrix.restype = ct.c_void_p
-        lib.copy_matrix.argtypes = [ct.c_void_p]
-        result_obj = lib.copy_matrix( self.matrix_obj )
+        lib.copy_matrix_int.restype = ct.c_void_p
+        lib.copy_matrix_int.argtypes = [ct.c_void_p]
+        result_obj = lib.copy_matrix_int( self.matrix_obj )
         error = call_two_matrices_func( func, result_obj, other.matrix_obj )
         if error != Error.success.value:
             raise Exception( error_description[Error(error)])
         return Matrix( result_obj )
 
     def __add__(self, other):
-        return self.operation( lib.sum_matrices, other )
+        return self.operation( lib.sum_matrices_int, other )
 
     def __sub__(self, other):
-        return self.operation( lib.sub_matrices, other )
+        return self.operation( lib.sub_matrices_int, other )
 
     def __mul__(self, other):
-        return self.operation( lib.mul_matrices, other )
+        return self.operation( lib.mul_matrices_int, other )
