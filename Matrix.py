@@ -43,8 +43,16 @@ error_description = {
 }
 
 
+class Type(Enum):
+    int_type = 0
+    float_type = 1
+
+
 class Matrix: 
-    def __init__(self, dimensionsOrOtherObj):
+    def __init__(self, type, dimensionsOrOtherObj):
+        self.type = type
+        if not isinstance(self.type, Type):
+            raise Exception( error_description[Error.invalid_arguments.value])
         if isinstance(dimensionsOrOtherObj, list):
             dimensions = dimensionsOrOtherObj
             self.matrix_obj = call_variadic_func( lib.new_matrix_int, dimensions, ct.c_void_p )
@@ -64,13 +72,15 @@ class Matrix:
         call_matrix_variadic_func( self.matrix_obj, lib.print_matrix_int )
 
     def operation(self, func, other):
+
         lib.copy_matrix_int.restype = ct.c_void_p
         lib.copy_matrix_int.argtypes = [ct.c_void_p]
         result_obj = lib.copy_matrix_int( self.matrix_obj )
         error = call_two_matrices_func( func, result_obj, other.matrix_obj )
+
         if error != Error.success.value:
             raise Exception( error_description[Error(error)])
-        return Matrix( result_obj )
+        return Matrix( self.type, result_obj )
 
     def __add__(self, other):
         return self.operation( lib.sum_matrices_int, other )
