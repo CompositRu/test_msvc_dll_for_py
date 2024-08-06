@@ -15,7 +15,8 @@ EXPORTS_API int fill_matrix( Matrix* matrix, int n, ... );
 EXPORTS_API void call_matrix( Matrix* matrix );
 
 EXPORTS_API void sort_matrix( Matrix* matrix );
-EXPORTS_API int sum_matrix( Matrix* variable, const Matrix* fixed );
+EXPORTS_API int sum_matrices( Matrix* variable, const Matrix* fixed );
+EXPORTS_API int mul_matrices( Matrix* variable, const Matrix* fixed );
 
 #ifdef __cplusplus
 }

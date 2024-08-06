@@ -10,7 +10,7 @@ Matrix* new_matrix( int n, ... )
     return new Matrix( n, &args );
 }
 
-EXPORTS_API Matrix* copy_matrix( const Matrix* other )
+Matrix* copy_matrix( const Matrix* other )
 {
     return new Matrix( *other );
 }
@@ -44,7 +44,7 @@ void call_matrix( Matrix* matrix )
         return;
     }
 
-    matrix->debugCall();
+    matrix->print();
 }
 
 void sort_matrix( Matrix* matrix )
@@ -52,9 +52,33 @@ void sort_matrix( Matrix* matrix )
     matrix->sort();
 }
 
-int sum_matrix( Matrix* variable, const Matrix* fixed )
+int sum_matrices( Matrix* variable, const Matrix* fixed )
 {
-    *variable += *fixed;
+    try
+    {
+        *variable += *fixed;
+    }
+    catch ( int errorCode )
+    {
+        return errorCode;
+    }
 
-    return 1;
+    return 0;
+}
+
+int mul_matrices( Matrix* variable, const Matrix* fixed )
+{   
+    try
+    {
+        Matrix* result = copy_matrix( variable );
+        *result *= *fixed;
+        variable->swap( std::move( *result ) );
+        del_matrix( result );
+    }
+    catch ( int errorCode )
+    {
+        return errorCode;
+    }
+
+    return 0;
 }

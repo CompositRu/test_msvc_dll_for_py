@@ -71,5 +71,16 @@ class Matrix:
         lib.copy_matrix.restype = ct.c_void_p
         lib.copy_matrix.argtypes = [ct.c_void_p]
         result_obj = lib.copy_matrix( self.matrix_obj )
-        error = call_two_nodes_func( lib.sum_matrix, result_obj, other.matrix_obj )
+        error = call_two_nodes_func( lib.sum_matrices, result_obj, other.matrix_obj )
+        if error != Error.success.value:
+            raise Exception( error_description[Error(error)])
+        return Matrix( result_obj )
+
+    def __mul__(self, other):
+        lib.copy_matrix.restype = ct.c_void_p
+        lib.copy_matrix.argtypes = [ct.c_void_p]
+        result_obj = lib.copy_matrix( self.matrix_obj )
+        error = call_two_nodes_func( lib.mul_matrices, result_obj, other.matrix_obj )
+        if error != Error.success.value:
+            raise Exception( error_description[Error(error)])
         return Matrix( result_obj )
