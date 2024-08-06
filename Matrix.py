@@ -11,7 +11,7 @@ def call_variadic_func( func, arg_list, return_type = None ):
     return func( size, *arg_list )
 
 
-def call_node_variadic_func( node, func, arg_list = [] ):
+def call_matrix_variadic_func( node, func, arg_list = [] ):
     size = len( arg_list )
     func.restype = ct.c_int
     if len(arg_list) > 0:
@@ -22,7 +22,7 @@ def call_node_variadic_func( node, func, arg_list = [] ):
         return func( node )
 
 
-def call_two_nodes_func( func, node1, node2 ):
+def call_two_matrices_func( func, node1, node2 ):
     func.restype = ct.c_int
     func.argtypes = [ct.c_void_p, ct.c_void_p] # variable matrix, fixed matrix
     return func( node1, node2 )       
@@ -52,35 +52,31 @@ class Matrix:
             matrix_obj = dimensionsOrOtherObj
             self.matrix_obj = matrix_obj
 
-    # def __init__(self, matrix_obj):
-    #     self.matrix_obj = matrix_obj
-    #     print( "self.matrix_obj 2", self.matrix_obj )
-
     def __del__(self):
-        call_node_variadic_func( self.matrix_obj, lib.del_matrix )
+        call_matrix_variadic_func( self.matrix_obj, lib.del_matrix )
 
     def fill(self, values = []):
-        error = call_node_variadic_func( self.matrix_obj, lib.fill_matrix, values )
+        error = call_matrix_variadic_func( self.matrix_obj, lib.fill_matrix, values )
         if error != Error.success.value:
             raise Exception( error_description[Error(error)])
 
     def print(self):
-        call_node_variadic_func( self.matrix_obj, lib.call_matrix )
+        call_matrix_variadic_func( self.matrix_obj, lib.call_matrix )
+
+    def operation(self, func, other):
+        lib.copy_matrix.restype = ct.c_void_p
+        lib.copy_matrix.argtypes = [ct.c_void_p]
+        result_obj = lib.copy_matrix( self.matrix_obj )
+        error = call_two_matrices_func( func, result_obj, other.matrix_obj )
+        if error != Error.success.value:
+            raise Exception( error_description[Error(error)])
+        return Matrix( result_obj )
 
     def __add__(self, other):
-        lib.copy_matrix.restype = ct.c_void_p
-        lib.copy_matrix.argtypes = [ct.c_void_p]
-        result_obj = lib.copy_matrix( self.matrix_obj )
-        error = call_two_nodes_func( lib.sum_matrices, result_obj, other.matrix_obj )
-        if error != Error.success.value:
-            raise Exception( error_description[Error(error)])
-        return Matrix( result_obj )
+        return self.operation( lib.sum_matrices, other )
+
+    def __sub__(self, other):
+        return self.operation( lib.sub_matrices, other )
 
     def __mul__(self, other):
-        lib.copy_matrix.restype = ct.c_void_p
-        lib.copy_matrix.argtypes = [ct.c_void_p]
-        result_obj = lib.copy_matrix( self.matrix_obj )
-        error = call_two_nodes_func( lib.mul_matrices, result_obj, other.matrix_obj )
-        if error != Error.success.value:
-            raise Exception( error_description[Error(error)])
-        return Matrix( result_obj )
+        return self.operation( lib.mul_matrices, other )

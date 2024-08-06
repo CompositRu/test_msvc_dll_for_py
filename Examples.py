@@ -19,6 +19,9 @@ try:
 
     m3 = m1 + m2
     m3.print()
+
+    m4 = m1 - m2
+    m4.print()
 except Exception as e:
     print( e )
 

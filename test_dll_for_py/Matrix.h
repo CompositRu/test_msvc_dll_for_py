@@ -26,6 +26,7 @@ public:
     void sort();
 
     void operator+=( const Matrix& otherMatrix );
+    void operator-=( const Matrix& otherMatrix );
     void operator*=( const Matrix& otherMatrix );
 
 private:

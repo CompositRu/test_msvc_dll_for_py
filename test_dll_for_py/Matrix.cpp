@@ -159,6 +159,19 @@ void Matrix::operator+=( const Matrix& otherMatrix )
     }
 }
 
+void Matrix::operator-=( const Matrix& otherMatrix )
+{
+    if ( dimensions_ != otherMatrix.dimensions_ )
+    {
+        throw static_cast<int>( Error::InvalidArguments );
+    }
+
+    for ( size_t i = 0; i < values_.size(); ++i )
+    {
+        values_[i] -= otherMatrix.values_[i];
+    }
+}
+
 void Matrix::operator*=( const Matrix& otherMatrix )
 {
     if ( dimensions_.size() != 2 || otherMatrix.dimensions_.size() != 2 )

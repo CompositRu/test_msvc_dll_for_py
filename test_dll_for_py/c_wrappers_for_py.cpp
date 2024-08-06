@@ -66,6 +66,20 @@ int sum_matrices( Matrix* variable, const Matrix* fixed )
     return 0;
 }
 
+int sub_matrices( Matrix* variable, const Matrix* fixed )
+{
+    try
+    {
+        *variable -= *fixed;
+    }
+    catch ( int errorCode )
+    {
+        return errorCode;
+    }
+
+    return 0;
+}
+
 int mul_matrices( Matrix* variable, const Matrix* fixed )
 {   
     try
